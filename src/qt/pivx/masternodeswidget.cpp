@@ -12,6 +12,7 @@
 
 #include "activemasternode.h"
 #include "clientmodel.h"
+#include "fs.h"
 #include "guiutil.h"
 #include "init.h"
 #include "masternode-sync.h"
@@ -22,7 +23,6 @@
 #include "askpassphrasedialog.h"
 #include "util.h"
 #include "qt/pivx/optionbutton.h"
-#include <boost/filesystem.hpp>
 #include <iostream>
 #include <fstream>
 
@@ -378,14 +378,15 @@ void MasterNodesWidget::onDeleteMNClicked()
 
     std::string strConfFile = "masternode.conf";
     std::string strDataDir = GetDataDir().string();
-    if (strConfFile != boost::filesystem::basename(strConfFile) + boost::filesystem::extension(strConfFile)) {
+    fs::path conf_file_path(strConfFile);
+    if (strConfFile != conf_file_path.filename().string()) {
         throw std::runtime_error(strprintf(_("masternode.conf %s resides outside data directory %s"), strConfFile, strDataDir));
     }
 
-    boost::filesystem::path pathBootstrap = GetDataDir() / strConfFile;
-    if (boost::filesystem::exists(pathBootstrap)) {
-        boost::filesystem::path pathMasternodeConfigFile = GetMasternodeConfigFile();
-        boost::filesystem::ifstream streamConfig(pathMasternodeConfigFile);
+    fs::path pathBootstrap = GetDataDir() / strConfFile;
+    if (fs::exists(pathBootstrap)) {
+        fs::path pathMasternodeConfigFile = GetMasternodeConfigFile();
+        fs::ifstream streamConfig(pathMasternodeConfigFile);
 
         if (!streamConfig.good()) {
             inform(tr("Invalid masternode.conf file"));
@@ -433,21 +434,18 @@ void MasterNodesWidget::onDeleteMNClicked()
         streamConfig.close();
 
         if (lineNumToRemove != -1) {
-            boost::filesystem::path pathConfigFile("masternode_temp.conf");
-            if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir() / pathConfigFile;
-            FILE* configFile = fopen(pathConfigFile.string().c_str(), "w");
+            fs::path pathConfigFile = AbsPathForConfigVal(fs::path("masternode_temp.conf"));
+            FILE* configFile = fsbridge::fopen(pathConfigFile, "w");
             fwrite(lineCopy.c_str(), std::strlen(lineCopy.c_str()), 1, configFile);
             fclose(configFile);
 
-            boost::filesystem::path pathOldConfFile("old_masternode.conf");
-            if (!pathOldConfFile.is_complete()) pathOldConfFile = GetDataDir() / pathOldConfFile;
-            if (boost::filesystem::exists(pathOldConfFile)) {
-                boost::filesystem::remove(pathOldConfFile);
+            fs::path pathOldConfFile = AbsPathForConfigVal(fs::path("old_masternode.conf"));
+            if (fs::exists(pathOldConfFile)) {
+                fs::remove(pathOldConfFile);
             }
             rename(pathMasternodeConfigFile, pathOldConfFile);
 
-            boost::filesystem::path pathNewConfFile("masternode.conf");
-            if (!pathNewConfFile.is_complete()) pathNewConfFile = GetDataDir() / pathNewConfFile;
+            fs::path pathNewConfFile = AbsPathForConfigVal(fs::path("masternode.conf"));
             rename(pathConfigFile, pathNewConfFile);
 
             // Unlock collateral
@@ -479,7 +477,7 @@ void MasterNodesWidget::onCreateMNClicked()
     }
 
     if (walletModel->getBalance() <= (COIN * 10000)) {
-        inform(tr("Not enough balance to create a masternode, 10,000 PIV required."));
+        inform(tr("Not enough balance to create a masternode, 10,000 %1 required.").arg(CURRENCY_UNIT.c_str()));
         return;
     }
     showHideOp(true);

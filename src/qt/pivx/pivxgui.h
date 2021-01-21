@@ -20,7 +20,6 @@
 #include "qt/pivx/send.h"
 #include "qt/pivx/receivewidget.h"
 #include "qt/pivx/addresseswidget.h"
-#include "qt/pivx/privacywidget.h"
 #include "qt/pivx/coldstakingwidget.h"
 #include "qt/pivx/masternodeswidget.h"
 #include "qt/pivx/snackbar.h"
@@ -66,10 +65,11 @@ public Q_SLOTS:
     void goToSend();
     void goToReceive();
     void goToAddresses();
-    void goToPrivacy();
     void goToMasterNodes();
     void goToColdStaking();
     void goToSettings();
+    void goToSettingsInfo();
+    void openNetworkMonitor();
 
     void connectActions();
 
@@ -130,7 +130,6 @@ private:
     SendWidget *sendWidget = nullptr;
     ReceiveWidget *receiveWidget = nullptr;
     AddressesWidget *addressesWidget = nullptr;
-    PrivacyWidget *privacyWidget = nullptr;
     MasterNodesWidget *masterNodesWidget = nullptr;
     ColdStakingWidget *coldStakingWidget = nullptr;
     SettingsWidget* settingsWidget = nullptr;

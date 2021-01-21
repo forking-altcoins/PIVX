@@ -11,6 +11,7 @@ src/pivx
 src/pivxd
 src/pivx-cli
 src/pivx-tx
+src/bench/bench_pivx
 src/test/test_pivx
 src/qt/test/test_pivx-qt
 
@@ -87,6 +88,11 @@ Makefile
 pivx-qt
 PIVX-Qt.app
 background.tiff*
+
+# Rust
+.cargo/.configured-for-*
+.cargo/config
+target/
 
 # Unit-tests
 Makefile.test

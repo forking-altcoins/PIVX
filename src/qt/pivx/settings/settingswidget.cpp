@@ -192,15 +192,13 @@ void SettingsWidget::loadClientModel()
 
         OptionsModel *optionsModel = this->clientModel->getOptionsModel();
         if (optionsModel) {
+            settingsDisplayOptionsWidget->setClientModel(clientModel);
+            settingsMainOptionsWidget->setClientModel(clientModel);
+            settingsWalletOptionsWidget->setClientModel(clientModel);
+
             mapper->setModel(optionsModel);
             setMapper();
             mapper->toFirst();
-            settingsMainOptionsWidget->setClientModel(clientModel);
-            settingsDisplayOptionsWidget->setClientModel(clientModel);
-            settingsWalletOptionsWidget->setClientModel(clientModel);
-            /* keep consistency for action triggered elsewhere */
-
-            // TODO: Connect show restart needed and apply changes.
         }
     }
 }
@@ -231,8 +229,15 @@ void SettingsWidget::onResetAction()
 void SettingsWidget::onSaveOptionsClicked()
 {
     if (mapper->submit()) {
+        OptionsModel* optionsModel = this->clientModel->getOptionsModel();
+        if (optionsModel->isSSTChanged() && !optionsModel->isSSTValid()) {
+            const double stakeSplitMinimum = optionsModel->getSSTMinimum();
+            settingsWalletOptionsWidget->setSpinBoxStakeSplitThreshold(stakeSplitMinimum);
+            inform(tr("Stake Split too low, it shall be either >= %1 or equal to 0 (to disable stake splitting)").arg(stakeSplitMinimum));
+            return;
+        }
         pwalletMain->MarkDirty();
-        if (this->clientModel->getOptionsModel()->isRestartRequired()) {
+        if (optionsModel->isRestartRequired()) {
             bool fAcceptRestart = openStandardDialog(tr("Restart required"), tr("Your wallet needs to be restarted to apply the changes\n"), tr("Restart Now"), tr("Restart Later"));
 
             if (fAcceptRestart) {
@@ -360,6 +365,14 @@ void SettingsWidget::showDebugConsole()
     onDebugConsoleClicked();
 }
 
+void SettingsWidget::showInformation()
+{
+    ui->pushButtonTools->setChecked(true);
+    onToolsClicked();
+    ui->pushButtonTools1->setChecked(true);
+    onInformationClicked();
+}
+
 void SettingsWidget::onDebugConsoleClicked()
 {
     ui->stackedWidgetContainer->setCurrentWidget(settingsConsoleWidget);
@@ -386,6 +399,11 @@ void SettingsWidget::onAboutClicked()
     HelpMessageDialog dlg(this, true);
     dlg.exec();
 
+}
+
+void SettingsWidget::openNetworkMonitor()
+{
+    settingsInformationWidget->openNetworkMonitor();
 }
 
 void SettingsWidget::selectOption(QPushButton* option)

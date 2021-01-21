@@ -128,7 +128,10 @@ void TxDetailDialog::setData(WalletModel *model, WalletModelTransaction &tx)
     ui->textAmount->setText(BitcoinUnits::formatWithUnit(nDisplayUnit, totalAmount, false, BitcoinUnits::separatorAlways) + " (Fee included)");
     int nRecipients = tx.getRecipients().size();
     if (nRecipients == 1) {
-        SendCoinsRecipient recipient = tx.getRecipients().at(0);
+        const SendCoinsRecipient& recipient = tx.getRecipients().at(0);
+        if (recipient.isP2CS) {
+            ui->labelSend->setText(tr("Delegating to"));
+        }
         if (recipient.label.isEmpty()) { // If there is no label, then do not show the blank space.
             ui->textSendLabel->setText(recipient.address);
             ui->textSend->setVisible(false);
@@ -202,7 +205,7 @@ void TxDetailDialog::onOutputsClicked()
                     CTxDestination dest;
                     bool isCsAddress = out.scriptPubKey.IsPayToColdStaking();
                     if (ExtractDestination(out.scriptPubKey, dest, isCsAddress)) {
-                        std::string address = ((isCsAddress) ? CBitcoinAddress::newCSInstance(dest) : CBitcoinAddress::newInstance(dest)).ToString();
+                        std::string address = EncodeDestination(dest, isCsAddress);
                         labelRes = QString::fromStdString(address);
                         labelRes = labelRes.left(16) + "..." + labelRes.right(16);
                     } else {

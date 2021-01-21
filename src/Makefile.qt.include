@@ -19,7 +19,6 @@ QT_FORMS_UI = \
   qt/forms/optionsdialog.ui \
   qt/forms/rpcconsole.ui \
   qt/pivx/forms/loadingdialog.ui \
-  qt/forms/zpivcontroldialog.ui \
   qt/pivx/forms/snackbar.ui \
   qt/pivx/forms/navmenuwidget.ui \
   qt/pivx/forms/lockunlock.ui \
@@ -50,7 +49,6 @@ QT_FORMS_UI = \
   qt/pivx/forms/tooltipmenu.ui \
   qt/pivx/forms/addresseswidget.ui \
   qt/pivx/forms/defaultdialog.ui \
-  qt/pivx/forms/privacywidget.ui \
   qt/pivx/forms/coldstakingwidget.ui \
   qt/pivx/settings/forms/settingsbackupwallet.ui \
   qt/pivx/settings/forms/settingsexportcsv.ui \
@@ -75,7 +73,6 @@ QT_MOC_CPP = \
   qt/moc_askpassphrasedialog.cpp \
   qt/moc_bantablemodel.cpp \
   qt/moc_bitcoinaddressvalidator.cpp \
-  qt/moc_bitcoinamountfield.cpp \
   qt/pivx/moc_pivxgui.cpp \
   qt/moc_bitcoinunits.cpp \
   qt/moc_clientmodel.cpp \
@@ -97,15 +94,12 @@ QT_MOC_CPP = \
   qt/moc_qvaluecombobox.cpp \
   qt/moc_recentrequeststablemodel.cpp \
   qt/moc_rpcconsole.cpp \
-  qt/moc_splashscreen.cpp \
   qt/moc_trafficgraphwidget.cpp \
-  qt/moc_transactiondesc.cpp \
   qt/moc_transactionfilterproxy.cpp \
   qt/moc_transactiontablemodel.cpp \
   qt/moc_utilitydialog.cpp \
   qt/moc_walletmodel.cpp \
   qt/pivx/moc_loadingdialog.cpp \
-  qt/moc_zpivcontroldialog.cpp \
   qt/pivx/moc_pwidget.cpp \
   qt/pivx/moc_focuseddialog.cpp \
   qt/pivx/moc_snackbar.cpp \
@@ -143,7 +137,6 @@ QT_MOC_CPP = \
   qt/pivx/moc_tooltipmenu.cpp \
   qt/pivx/moc_addresseswidget.cpp \
   qt/pivx/moc_defaultdialog.cpp \
-  qt/pivx/moc_privacywidget.cpp \
   qt/pivx/moc_coldstakingwidget.cpp \
   qt/pivx/settings/moc_settingsbackupwallet.cpp \
   qt/pivx/settings/moc_settingsexportcsv.cpp \
@@ -168,7 +161,6 @@ BITCOIN_MM = \
 
 QT_MOC = \
   qt/pivx.moc \
-  qt/bitcoinamountfield.moc \
   qt/intro.moc \
   qt/rpcconsole.moc \
   qt/pivx/settings/moc_settingsconsolewidget.cpp
@@ -188,7 +180,6 @@ BITCOIN_QT_H = \
   qt/askpassphrasedialog.h \
   qt/bantablemodel.h \
   qt/bitcoinaddressvalidator.h \
-  qt/bitcoinamountfield.h \
   qt/pivx/pivxgui.h \
   qt/bitcoinunits.h \
   qt/clientmodel.h \
@@ -214,9 +205,7 @@ BITCOIN_QT_H = \
   qt/qvaluecombobox.h \
   qt/recentrequeststablemodel.h \
   qt/rpcconsole.h \
-  qt/splashscreen.h \
   qt/trafficgraphwidget.h \
-  qt/transactiondesc.h \
   qt/transactionfilterproxy.h \
   qt/transactionrecord.h \
   qt/transactiontablemodel.h \
@@ -227,7 +216,6 @@ BITCOIN_QT_H = \
   qt/pivx/pfborderimage.h \
   qt/pivx/loadingdialog.h \
   qt/winshutdownmonitor.h \
-  qt/zpivcontroldialog.h \
   qt/pivx/pwidget.h \
   qt/pivx/focuseddialog.h \
   qt/pivx/guitransactionsutils.h \
@@ -270,7 +258,6 @@ BITCOIN_QT_H = \
   qt/pivx/tooltipmenu.h \
   qt/pivx/addresseswidget.h \
   qt/pivx/defaultdialog.h \
-  qt/pivx/privacywidget.h \
   qt/pivx/coldstakingwidget.h \
   qt/pivx/settings/settingsbackupwallet.h \
   qt/pivx/settings/settingsexportcsv.h \
@@ -513,7 +500,6 @@ RES_ICONS = \
 BITCOIN_QT_BASE_CPP = \
   qt/bantablemodel.cpp \
   qt/bitcoinaddressvalidator.cpp \
-  qt/bitcoinamountfield.cpp \
   qt/pivx/pivxgui.cpp \
   qt/bitcoinunits.cpp \
   qt/clientmodel.cpp \
@@ -529,7 +515,6 @@ BITCOIN_QT_BASE_CPP = \
   qt/qvalidatedlineedit.cpp \
   qt/qvaluecombobox.cpp \
   qt/rpcconsole.cpp \
-  qt/splashscreen.cpp \
   qt/trafficgraphwidget.cpp \
   qt/utilitydialog.cpp
 
@@ -546,14 +531,12 @@ BITCOIN_QT_WALLET_CPP = \
   qt/paymentrequestplus.cpp \
   qt/paymentserver.cpp \
   qt/recentrequeststablemodel.cpp \
-  qt/transactiondesc.cpp \
   qt/transactionfilterproxy.cpp \
   qt/transactionrecord.cpp \
   qt/transactiontablemodel.cpp \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \
   qt/pivx/loadingdialog.cpp \
-  qt/zpivcontroldialog.cpp \
   qt/pivx/pwidget.cpp \
   qt/pivx/focuseddialog.cpp \
   qt/pivx/guitransactionsutils.cpp \
@@ -595,7 +578,6 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/tooltipmenu.cpp \
   qt/pivx/addresseswidget.cpp \
   qt/pivx/defaultdialog.cpp \
-  qt/pivx/privacywidget.cpp \
   qt/pivx/coldstakingwidget.cpp \
   qt/pivx/settings/settingsbackupwallet.cpp \
   qt/pivx/settings/settingsexportcsv.cpp \
@@ -682,7 +664,7 @@ endif
 if ENABLE_ZMQ
 qt_pivx_qt_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
-qt_pivx_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBBITCOIN_ZEROCOIN) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
+qt_pivx_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBBITCOIN_ZEROCOIN) $(LIBSAPLING) $(LIBRUSTZCASH) $(LIBZCASH_LIBS) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
   $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(SVG_LIBS) $(CHARTS_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBSECP256K1) \
   $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
 qt_pivx_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)

@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "crypto/common.h"
+#include "memusage.h"
 #include "prevector.h"
 
 typedef std::vector<unsigned char> valtype;
@@ -181,12 +182,6 @@ enum opcodetype
 
     // cold staking
     OP_CHECKCOLDSTAKEVERIFY = 0xd1,
-
-    // template matching params
-    OP_SMALLINTEGER = 0xfa,
-    OP_PUBKEYS = 0xfb,
-    OP_PUBKEYHASH = 0xfd,
-    OP_PUBKEY = 0xfe,
 
     OP_INVALIDOPCODE = 0xff,
 };
@@ -646,13 +641,14 @@ public:
         return (size() > 0 && *begin() == OP_RETURN) || (size() > MAX_SCRIPT_SIZE);
     }
 
-    std::string ToString() const;
     void clear()
     {
         // The default prevector::clear() does not release memory
         CScriptBase::clear();
         shrink_to_fit();
     }
+
+    size_t DynamicMemoryUsage() const;
 };
 
 #endif // BITCOIN_SCRIPT_SCRIPT_H

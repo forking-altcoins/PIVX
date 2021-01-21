@@ -6,8 +6,12 @@
 #include "wallet/test/wallet_test_fixture.h"
 
 #include "rpc/server.h"
+#include "sapling/util.h"
 #include "wallet/db.h"
 #include "wallet/wallet.h"
+#include "wallet/rpcwallet.h"
+
+#include <librustzcash.h>
 
 void clean()
 {
@@ -20,16 +24,16 @@ void clean()
 
 WalletTestingSetup::WalletTestingSetup(): TestingSetup()
 {
+    //initZKSNARKS(); // init zk-snarks lib
+
     clean(); // todo: research why we have an initialized bitdb here.
     bitdb.MakeMock();
+    walletRegisterRPCCommands();
 
     bool fFirstRun;
     pwalletMain = new CWallet("test_wallet.dat");
     pwalletMain->LoadWallet(fFirstRun);
     RegisterValidationInterface(pwalletMain);
-
-    // todo: back port method.
-    //RegisterWalletRPCCommands(tableRPC);
 }
 
 WalletTestingSetup::~WalletTestingSetup()
